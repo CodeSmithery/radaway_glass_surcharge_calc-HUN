@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using radaway_surcharge_calc_HUN.Data;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -16,9 +17,12 @@ namespace radaway_surcharge_calc_HUN
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        private readonly DataContext _context;
+
+        public MainWindow(DataContext context)
         {
             InitializeComponent();
         }
     }
+
 }
