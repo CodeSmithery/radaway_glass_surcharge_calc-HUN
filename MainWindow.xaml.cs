@@ -12,16 +12,18 @@ using System.Windows.Shapes;
 
 namespace radaway_surcharge_calc_HUN
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly DataContext _context;
+        public bool IsSaveOn { get; set; } = false;
+        public bool IsCrudMenuOn { get; set; } = true;
+        public readonly dataContext _dbcontext;
 
-        public MainWindow(DataContext context)
+        public MainWindow(dataContext dbcontext)
         {
             InitializeComponent();
+            dataContext db = dbcontext;
+            int asd = db.ProductFamilies.Count();
+            MessageBox.Show($"{asd}");
         }
     }
 

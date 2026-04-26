@@ -1,0 +1,37 @@
+﻿<UserControl x:Class="radaway_surcharge_calc_HUN.Views.User_Controls.ToolBarMenu"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:radaway_surcharge_calc_HUN.Views.User_Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="25" d:DesignWidth="600">
+    <Grid>
+        <Menu Height="25" VerticalAlignment="Top" Background="AntiqueWhite" FontSize="15" VerticalContentAlignment="Center">
+            <MenuItem x:Name="p1" Header="Fájl" IsEnabled="{Binding IsCrudMenuOn, RelativeSource={RelativeSource AncestorType=Window}}">
+                <MenuItem Header="Adatbázis újragenerálása" x:Name="Database_Reset" Click="Database_Reset_Click"/>
+                <MenuItem Header="Letöltés">
+                    <MenuItem Header="Termékcsalád tábla" x:Name="PR_Download"/>
+                    <MenuItem Header="Üvegfelár tábla" x:Name="GS_Download"/>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="Adat" IsEnabled="{Binding IsCrudMenuOn, RelativeSource={RelativeSource AncestorType=Window}}">
+                <MenuItem Header="TermékCsaládok">
+                    <MenuItem Header="Beszúrás" x:Name="PF_Create" Click="MenuItem_Click"/>
+                    <MenuItem Header="Listázás" x:Name="PF_Read" Click="MenuItem_Click"/>
+                    <MenuItem Header="Frissítés" x:Name="PF_Update" Click="MenuItem_Click"/>
+                    <MenuItem Header="Törlés" x:Name="PF_Delete" Click="MenuItem_Click"/>
+                </MenuItem>
+                <MenuItem Header="Üvegfelárak">
+                    <MenuItem Header="Beszúrás" x:Name="GS_Create" Click="MenuItem_Click"/>
+                    <MenuItem Header="Listázás" x:Name="GS_Read" Click="MenuItem_Click"/>
+                    <MenuItem Header="Frissítés" x:Name="GS_Update" Click="MenuItem_Click"/>
+                    <MenuItem Header="Törlés" x:Name="GS_Delete" Click="MenuItem_Click"/>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem x:Name="p2" Header="Mentés" IsEnabled="{Binding IsSaveOn, RelativeSource={RelativeSource AncestorType=Window}}"/>
+            <MenuItem x:Name="Help" Header="Segítség" Click="Help_Click" Tag="https://radaway.hu/zuhanykabin-uveg#:~:text=Factory%20/%20Mirror-,%C3%9Cvegfel%C3%A1rak,-%C3%9Cvegfel%C3%A1rakat%20az%20al%C3%A1bbi"/>
+            <MenuItem x:Name="Exit"  Header="Kilépés" Click="Exit_Click"/>
+        </Menu>
+    </Grid>
+</UserControl>

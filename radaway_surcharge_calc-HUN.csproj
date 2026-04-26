@@ -29,10 +29,4 @@
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.7" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Views\User_Controls\" />
-    <Folder Include="Views\" />
-    <Folder Include="Views\Windows\" />
-  </ItemGroup>
-
 </Project>
