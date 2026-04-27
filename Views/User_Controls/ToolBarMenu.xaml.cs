@@ -86,13 +86,27 @@ namespace radaway_surcharge_calc_HUN.Views.User_Controls
 
         private void Database_Reset_Click(object sender, RoutedEventArgs e)
         {
-            var parentWindow = Window.GetWindow(this);
+            // var parentWindow = Window.GetWindow(this); 
 
             var resetService = App.AppHost.Services.GetService<DBReset>();
 
             if (resetService != null)
             {
                 resetService.ResetDatabase();
+            }
+        }
+
+        private void Export_Click(object sender, RoutedEventArgs e)
+        {
+            var exportService = App.AppHost.Services.GetService<Export>();
+            string[] parts;
+            string menuItemName = sender is MenuItem menuItem ? menuItem.Name : "";
+            if (menuItemName.Length == 0)
+                return;
+            parts = menuItemName.Split('_');
+            if (exportService != null)
+            {
+                exportService.ExportTable(parts[0]);
             }
         }
     }

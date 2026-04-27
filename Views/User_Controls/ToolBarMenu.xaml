@@ -10,9 +10,9 @@
         <Menu Height="25" VerticalAlignment="Top" Background="AntiqueWhite" FontSize="15" VerticalContentAlignment="Center">
             <MenuItem x:Name="p1" Header="Fájl" IsEnabled="{Binding IsCrudMenuOn, RelativeSource={RelativeSource AncestorType=Window}}">
                 <MenuItem Header="Adatbázis újragenerálása" x:Name="Database_Reset" Click="Database_Reset_Click"/>
-                <MenuItem Header="Letöltés">
-                    <MenuItem Header="Termékcsalád tábla" x:Name="PR_Download"/>
-                    <MenuItem Header="Üvegfelár tábla" x:Name="GS_Download"/>
+                <MenuItem Header="Export">
+                    <MenuItem Header="Termékcsalád tábla" x:Name="PR_Export" Click="Export_Click"/>
+                    <MenuItem Header="Üvegfelár tábla" x:Name="GS_Export" Click="Export_Click"/>
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="Adat" IsEnabled="{Binding IsCrudMenuOn, RelativeSource={RelativeSource AncestorType=Window}}">
@@ -29,7 +29,8 @@
                     <MenuItem Header="Törlés" x:Name="GS_Delete" Click="MenuItem_Click"/>
                 </MenuItem>
             </MenuItem>
-            <MenuItem x:Name="p2" Header="Mentés" IsEnabled="{Binding IsSaveOn, RelativeSource={RelativeSource AncestorType=Window}}"/>
+            <MenuItem x:Name="p2" Header="Mentés" 
+                      Command="{Binding SaveCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
             <MenuItem x:Name="Help" Header="Segítség" Click="Help_Click" Tag="https://radaway.hu/zuhanykabin-uveg#:~:text=Factory%20/%20Mirror-,%C3%9Cvegfel%C3%A1rak,-%C3%9Cvegfel%C3%A1rakat%20az%20al%C3%A1bbi"/>
             <MenuItem x:Name="Exit"  Header="Kilépés" Click="Exit_Click"/>
         </Menu>

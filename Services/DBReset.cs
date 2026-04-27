@@ -1,4 +1,5 @@
-﻿using radaway_surcharge_calc_HUN.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using radaway_surcharge_calc_HUN.Data;
 using radaway_surcharge_calc_HUN.Models;
 using System.Collections.Generic;
 using System.IO;
@@ -21,18 +22,25 @@ namespace radaway_surcharge_calc_HUN.Services
         public void ResetDatabase()
         {
             // 1) Törlés
-            if (File.Exists(rootPath + productFile))
-                _context.ProductFamilies.RemoveRange(_context.ProductFamilies);
-            else {
-                MessageBox.Show($"Nem található a fájl a {rootPath + productFile} helyen!");
+            try
+            {
+                if (MessageBox.Show("Biztosan újra szeretné tölteni az adatbázist? Ez a művelet visszafordíthatatlan, és minden jelenlegi adat elveszik!",
+                    "Biztos?", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                {
+                    _context.ProductFamilies.RemoveRange(_context.ProductFamilies);
+                    _context.GlassSurcharges.RemoveRange(_context.GlassSurcharges);
+                    _context.Database.ExecuteSqlRaw("DBCC CHECKIDENT ('TermekCsalad', RESEED, 0)");
+                    _context.Database.ExecuteSqlRaw("DBCC CHECKIDENT ('UvegFelar', RESEED, 0)");
+                }
+                else
+                    return;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Hiba történt az adatbázis törlése során:\n " + ex.Message, "Hiba", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-            if (File.Exists(rootPath + glassFile))
-                _context.GlassSurcharges.RemoveRange(_context.GlassSurcharges);
-            else {
-                MessageBox.Show($"Nem található a fájl a {rootPath + glassFile} helyen!");
-                return;
-            }
+
             _context.SaveChanges();
 
             // 2) Újratöltés CSV-ből
@@ -45,10 +53,10 @@ namespace radaway_surcharge_calc_HUN.Services
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Hiba történt az adatbázis újratöltése során:\n " + ex.Message);
+                MessageBox.Show("Hiba történt az adatbázis újratöltése során:\n " + ex.Message, "Hiba", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-            MessageBox.Show("Adatbázis sikeresen visszaállítva az eredeti állapotára.");
+            MessageBox.Show("Adatbázis sikeresen visszaállítva az eredeti állapotára.", "Kész", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private void LoadProductFamilies()

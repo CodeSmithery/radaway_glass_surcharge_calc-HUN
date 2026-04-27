@@ -24,6 +24,8 @@ namespace radaway_surcharge_calc_HUN
                     services.AddSingleton<MainWindow>();
 
                     services.AddTransient<DBReset>();
+
+                    services.AddTransient<Export>();
                 })
                 .Build();
 

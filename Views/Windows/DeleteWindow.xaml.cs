@@ -1,4 +1,5 @@
-﻿using System;
+﻿using radaway_surcharge_calc_HUN.Services.Command;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -19,9 +20,16 @@ namespace radaway_surcharge_calc_HUN.Views.Windows
     {
         public bool IsSaveOn { get; set; } = false;
         public bool IsCrudMenuOn { get; set; } = false;
+        public ICommand SaveCommand { get; }
         public DeleteWindow(string tableName)
         {
             InitializeComponent();
+            SaveCommand = new RelayCommand(Save, () => true);
+            DataContext = this;
+        }
+        public void Save()
+        {
         }
     }
 }
+    

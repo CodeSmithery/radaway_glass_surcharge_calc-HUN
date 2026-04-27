@@ -9,6 +9,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using radaway_surcharge_calc_HUN.Services.Command;
 
 namespace radaway_surcharge_calc_HUN.Views.Windows
 {
@@ -19,9 +20,15 @@ namespace radaway_surcharge_calc_HUN.Views.Windows
     {
         public bool IsSaveOn { get; set; } = true;
         public bool IsCrudMenuOn { get; set; } = false;
+        public ICommand SaveCommand { get; }
         public CreateWindow(string tableName)
         {
             InitializeComponent();
+            SaveCommand = new RelayCommand(Save, () => true);
+            DataContext = this;
+        }
+        public void Save()
+        {
         }
     }
 }
