@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using radaway_surcharge_calc_HUN.Data;
+using radaway_surcharge_calc_HUN.Services;
 using System.Windows;
 
 namespace radaway_surcharge_calc_HUN
@@ -16,11 +17,15 @@ namespace radaway_surcharge_calc_HUN
             AppHost = Host.CreateDefaultBuilder()
                 .ConfigureServices((context, services) =>
                 {
-                    services.AddDbContext<DataContext>(options =>
+                    services.AddDbContext<dataContext>(options =>
                         options.UseSqlServer(
                             context.Configuration.GetConnectionString("RadawayDB")));
 
                     services.AddSingleton<MainWindow>();
+
+                    services.AddTransient<DBReset>();
+
+                    services.AddTransient<Export>();
                 })
                 .Build();
 

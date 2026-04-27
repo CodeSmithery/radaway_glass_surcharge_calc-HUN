@@ -1,5 +1,7 @@
-﻿using radaway_surcharge_calc_HUN.Data;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using radaway_surcharge_calc_HUN.Services.Command;
+using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -8,30 +10,27 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace radaway_surcharge_calc_HUN
+namespace radaway_surcharge_calc_HUN.Views.Windows
 {
-    public partial class MainWindow : Window
+    /// <summary>
+    /// Interaction logic for ReadWindow.xaml
+    /// </summary>
+    public partial class ReadWindow : Window
     {
         public bool IsSaveOn { get; set; } = false;
-        public bool IsCrudMenuOn { get; set; } = true;
-        public readonly dataContext _dbcontext;
+        public bool IsCrudMenuOn { get; set; } = false;
         public ICommand SaveCommand { get; }
-
-        public MainWindow(dataContext dbcontext)
+        public ReadWindow(string tableName)
         {
             InitializeComponent();
-            SaveCommand = new RelayCommand(Save, ()=>false);
+            InitializeComponent();
+            SaveCommand = new RelayCommand(Save, () => true);
             DataContext = this;
-            dataContext db = dbcontext;
-            int asd = db.ProductFamilies.Count();
-            MessageBox.Show($"{asd}");
         }
         public void Save()
         {
         }
     }
-
 }
