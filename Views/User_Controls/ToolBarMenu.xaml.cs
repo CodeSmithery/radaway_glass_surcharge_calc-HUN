@@ -23,40 +23,6 @@ namespace radaway_surcharge_calc_HUN.Views.User_Controls
         public ToolBarMenu()
         {
             InitializeComponent();
-            
-        }
-
-        private void MenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            string[] parts;
-            string menuItemName = sender is MenuItem menuItem ? menuItem.Name : "";
-            if (menuItemName.Length == 0)
-                return;
-            parts = menuItemName.Split('_');
-            OpenWindow(parts[0], parts[1]);
-        }
-
-        public void OpenWindow(string tableName, string whichFunction)
-        {
-            
-            switch (whichFunction) {
-                case "Create":
-                    CreateWindow createWindow = new(tableName);
-                    createWindow.ShowDialog();
-                    break;
-                case "Read":
-                    ReadWindow readWindow = new(tableName);
-                    readWindow.ShowDialog();
-                    break;
-                case "Update":
-                    UpdateWindow updateWindow = new(tableName);
-                    updateWindow.ShowDialog();
-                    break;
-                case "Delete":
-                    DeleteWindow deleteWindow = new(tableName);
-                    deleteWindow.ShowDialog();
-                    break;
-                }
         }
 
         private void Help_Click(object sender, RoutedEventArgs e)
@@ -108,6 +74,12 @@ namespace radaway_surcharge_calc_HUN.Views.User_Controls
             {
                 exportService.ExportTable(parts[0]);
             }
+        }
+
+        private void miCRUD_Click(object sender, RoutedEventArgs e)
+        {
+            var window = App.AppHost.Services.GetService<CrudWindow>();
+            window?.ShowDialog();
         }
     }
 }

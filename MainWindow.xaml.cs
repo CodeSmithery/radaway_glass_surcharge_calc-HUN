@@ -15,7 +15,6 @@ namespace radaway_surcharge_calc_HUN
 {
     public partial class MainWindow : Window
     {
-        public bool IsSaveOn { get; set; } = false;
         public bool IsCrudMenuOn { get; set; } = true;
         public readonly dataContext _dbcontext;
         public ICommand SaveCommand { get; }
