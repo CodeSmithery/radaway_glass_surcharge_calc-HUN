@@ -1,5 +1,7 @@
 ﻿using radaway_surcharge_calc_HUN.Data;
+using radaway_surcharge_calc_HUN.Models;
 using radaway_surcharge_calc_HUN.Services.Command;
+using radaway_surcharge_calc_HUN.Views.User_Controls;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -15,7 +17,6 @@ namespace radaway_surcharge_calc_HUN
 {
     public partial class MainWindow : Window
     {
-        public bool IsSaveOn { get; set; } = false;
         public bool IsCrudMenuOn { get; set; } = true;
         public readonly dataContext _dbcontext;
         public ICommand SaveCommand { get; }
@@ -25,9 +26,7 @@ namespace radaway_surcharge_calc_HUN
             InitializeComponent();
             SaveCommand = new RelayCommand(Save, ()=>false);
             DataContext = this;
-            dataContext db = dbcontext;
-            int asd = db.ProductFamilies.Count();
-            MessageBox.Show($"{asd}");
+            dataContext db = dbcontext;         
         }
         public void Save()
         {

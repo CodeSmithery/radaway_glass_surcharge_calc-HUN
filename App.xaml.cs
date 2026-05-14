@@ -4,6 +4,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using radaway_surcharge_calc_HUN.Data;
 using radaway_surcharge_calc_HUN.Services;
+using radaway_surcharge_calc_HUN.Views.User_Controls;
+using radaway_surcharge_calc_HUN.Views.Windows;
 using System.Windows;
 
 namespace radaway_surcharge_calc_HUN
@@ -26,6 +28,9 @@ namespace radaway_surcharge_calc_HUN
                     services.AddTransient<DBReset>();
 
                     services.AddTransient<Export>();
+
+                    services.AddTransient<CrudWindow>();
+
                 })
                 .Build();
 
