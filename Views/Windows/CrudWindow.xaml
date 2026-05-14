@@ -27,36 +27,43 @@
                         
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
+                            <ColumnDefinition Width="5"/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
+                        
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="0.15*" MinHeight="20"/>
+                            <RowDefinition Height="0.8*"/>
+                        </Grid.RowDefinitions>
 
-                        <Grid Margin="2,2,1,2">
-                            
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" Height="20" Text="Termékcsaládok"></TextBlock>
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" Height="20" Text="Üvegfelárak" Grid.Column="2"></TextBlock>
+
+                        <Grid Margin="2,2,1,2" Grid.Row="1" x:Name="gdInputPr">
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+
                         </Grid>
 
-                        <Grid Grid.Column="1" Margin="1,2,2,2">
-                            
+                        <GridSplitter Grid.Column="1" Grid.RowSpan="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+
+                        <Grid Grid.Column="2" Margin="1,2,2,2" Grid.Row="1" x:Name="gdInputGl">
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+
                         </Grid>  
                         
                     </Grid>
                     
                 </TabItem>
-                
-                <TabItem Header="Szerkesztés">
 
-                    <Grid Margin="3">
-
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-
-
-
-                    </Grid>
-
-                </TabItem>
-                
             </TabControl>
             
         </Grid>
@@ -78,15 +85,18 @@
                 <DataGrid VerticalScrollBarVisibility="Auto" Margin="0,20,0,0" Background="Transparent"
                           x:Name="dgProductFamilies"
                           AutoGenerateColumns="False"
-                          IsReadOnly="True"
+                          IsReadOnly="False"
                           SelectionMode="Single"
                           SelectionUnit="FullRow"
                           CanUserAddRows="True">
                     
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="ID" Binding="{Binding TermekID}" IsReadOnly="True" Width="0.05*"/>
-                        <DataGridTextColumn Header="Termékcsalád" Binding="{Binding Termek_Csalad}" Width="0.65*"/>
-                        <DataGridTextColumn Header="Vastagság (mm)" Binding="{Binding Uveg_Vastagsag_mm}" Width="0.3*"/>
+                        <DataGridTextColumn Header="ID" Binding="{Binding TermekID}" IsReadOnly="True" 
+                                            Width="0.05*" />
+                        <DataGridTextColumn Header="Termékcsalád" Binding="{Binding Termek_Csalad}" 
+                                            Width="0.65*"/>
+                        <DataGridTextColumn Header="Üveg Vastagság" Binding="{Binding Uveg_Vastagsag_mm, StringFormat={}{0} mm}" 
+                                            Width="0.3*"/>
                     </DataGrid.Columns>
                     
                 </DataGrid>
@@ -108,10 +118,10 @@
                               CanUserAddRows="True">
 
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="ID" Binding="{Binding ID}" IsReadOnly="True" Width="0.05*"/>
-                        <DataGridTextColumn Header="Üveg típus" Binding="{Binding UvegTipus}" Width="0.4*"/>
-                        <DataGridTextColumn Header="Vastagság (mm)" Binding="{Binding Vastagsag}" Width="0.20*"/>
-                        <DataGridTextColumn Header="Felár (Ft)" Binding="{Binding Felar}" Width="0.35*"/>
+                        <DataGridTextColumn Header="ID" Binding="{Binding FelarID}" IsReadOnly="True" Width="0.05*"/>
+                        <DataGridTextColumn Header="Üveg típus" Binding="{Binding Uveg_Tipus}" Width="0.4*"/>
+                        <DataGridTextColumn Header="Üveg Vastagság" Binding="{Binding Uveg_Vastagsag_mm, StringFormat={}{0} mm}" Width="0.30*"/>
+                        <DataGridTextColumn Header="Felár" Binding="{Binding Felar_ft, StringFormat={}{0:N0}.- Ft}" Width="0.25*"/>
                     </DataGrid.Columns>
                     
                 </DataGrid>

@@ -8,7 +8,11 @@
         mc:Ignorable="d"
         Title="Üvegfelár kalkulátor" Height="900" Width="600">
     <Grid>
-        <Grid>
+        <Grid x:Name="ass">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
             <UserControls:ToolBarMenu/>
         </Grid>
     </Grid>

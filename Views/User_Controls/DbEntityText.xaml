@@ -1,0 +1,31 @@
+﻿<UserControl x:Class="radaway_surcharge_calc_HUN.Views.User_Controls.DbEntityText"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:radaway_surcharge_calc_HUN.Views.User_Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="50" d:DesignWidth="400">
+    <Grid Background="Transparent" MaxHeight="60" VerticalAlignment="Center">
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width=".4*"/>
+            <ColumnDefinition Width=".6*"/>
+        </Grid.ColumnDefinitions>
+        
+        <TextBlock Grid.Column="1" Background="Transparent" Text="{Binding Placeholder, RelativeSource={RelativeSource AncestorType=UserControl}, StringFormat=pl.: {0}}"
+                   FontSize="16" VerticalAlignment="Center" Margin="2,0,0,0"
+                   Foreground="DarkGray"
+                   x:Name="tblExample"/>
+        
+        <TextBox Grid.Column="1" Background="Transparent"
+                 FontSize="16" VerticalAlignment="Center" BorderThickness="0"
+                 x:Name="tbxInput" TextChanged="tbxInput_TextChanged"
+                 Text="{Binding Value, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}"/>
+
+        <Label Grid.Column="0" Background="Transparent" Content="{Binding Label, RelativeSource={RelativeSource AncestorType=UserControl}, StringFormat=pl.: {0}}"
+               FontSize="16" VerticalAlignment="Center" FontWeight="Bold"
+               x:Name="lbLabel" HorizontalAlignment="Right"/>
+        
+    </Grid>
+</UserControl>
