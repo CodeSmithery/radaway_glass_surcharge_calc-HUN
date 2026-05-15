@@ -144,18 +144,18 @@ namespace radaway_surcharge_calc_HUN.Views.Windows
 
         private void CreateGridTextBoxes()
         {
-            Random rnd = new Random();
+            Random rnd = new();
             int prRnd;
             int glRnd;
 
             prRnd = rnd.Next(0, productFamilies.Count);
             glRnd = rnd.Next(0, glassSurcharges.Count);
 
-            pr_Fam = new DbEntityText();
-            pr_Thick = new DbEntityText();
-            gl_Type = new DbEntityText();
-            gl_Thick = new DbEntityText();
-            gl_Surch = new DbEntityText();
+            pr_Fam = new();
+            pr_Thick = new();
+            gl_Type = new();
+            gl_Thick = new();
+            gl_Surch = new();
 
             Grid.SetRow(pr_Fam, 0);
             Grid.SetRow(pr_Thick, 1);
@@ -187,10 +187,10 @@ namespace radaway_surcharge_calc_HUN.Views.Windows
             _dbcontext.Database.ExecuteSqlRaw("DBCC CHECKIDENT ('UvegFelar', RESEED)");
         }
 
-        public void LoadDataFromDb()
+        private void LoadDataFromDb()
         {
-            productFamilies = _dbcontext.ProductFamilies.ToList();
-            glassSurcharges = _dbcontext.GlassSurcharges.ToList();
+            productFamilies = [.. _dbcontext.ProductFamilies];
+            glassSurcharges = [.. _dbcontext.GlassSurcharges];
         }
     }
 }
