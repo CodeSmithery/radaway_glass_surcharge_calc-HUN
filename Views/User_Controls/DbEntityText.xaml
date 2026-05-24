@@ -19,9 +19,10 @@
                    x:Name="tblExample"/>
         
         <TextBox Grid.Column="1" Background="Transparent"
-                 FontSize="16" VerticalAlignment="Center" BorderThickness="0"
+                 FontSize="16" VerticalAlignment="Center" BorderThickness="1" BorderBrush="LightGray"
                  x:Name="tbxInput" TextChanged="tbxInput_TextChanged"
-                 Text="{Binding Value, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}"/>
+                 Text="{Binding Value, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}" 
+                 />
 
         <Label Grid.Column="0" Background="Transparent" Content="{Binding Label, RelativeSource={RelativeSource AncestorType=UserControl}, StringFormat=pl.: {0}}"
                FontSize="16" VerticalAlignment="Center" FontWeight="Bold"

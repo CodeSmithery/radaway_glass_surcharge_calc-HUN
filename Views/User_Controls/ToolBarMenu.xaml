@@ -16,10 +16,10 @@
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="Adatmódosítás" IsEnabled="{Binding IsCrudMenuOn, RelativeSource={RelativeSource AncestorType=Window}}" x:Name="miCRUD" Click="miCRUD_Click"/>
-            <MenuItem x:Name="p2" Header="Mentés" 
-                      Command="{Binding SaveCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
-            <MenuItem x:Name="Help" Header="Segítség" Click="Help_Click" Tag="https://radaway.hu/zuhanykabin-uveg#:~:text=Factory%20/%20Mirror-,%C3%9Cvegfel%C3%A1rak,-%C3%9Cvegfel%C3%A1rakat%20az%20al%C3%A1bbi"/>
-            <MenuItem x:Name="Exit"  Header="Kilépés" Click="Exit_Click"/>
+            <MenuItem x:Name="Help" Header="Segítség" >
+                <MenuItem Header="Számoláshoz" Click="Help_Click" Tag="https://radaway.hu/zuhanykabin-uveg#:~:text=Factory%20/%20Mirror-,%C3%9Cvegfel%C3%A1rak,-%C3%9Cvegfel%C3%A1rakat%20az%20al%C3%A1bbi"/>
+                <MenuItem Header="Dokumentáció" Click="Help_Click" Tag="https://docs.google.com/document/d/1wuRtmGxHHlLNXpASSQxfAr-Nb1B7_98GOjYthS__tao/edit?usp=sharing"/>
+            </MenuItem>
         </Menu>
     </Grid>
 </UserControl>

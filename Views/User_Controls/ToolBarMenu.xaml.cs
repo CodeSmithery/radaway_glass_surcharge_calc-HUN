@@ -43,12 +43,13 @@ namespace radaway_surcharge_calc_HUN.Views.User_Controls
                 }
             }
         }
-        private void Exit_Click(object sender, RoutedEventArgs e)
-        {
-            var parentWindow = Window.GetWindow(this);
-            CustomMessageBox_Exit exit = new CustomMessageBox_Exit(parentWindow);
-            exit.ShowDialog();
-        }
+        //private void Exit_Click(object sender, RoutedEventArgs e)
+        //{
+        //    var parentWindow = Window.GetWindow(this);
+        //    CustomMessageBox_Exit exit = new CustomMessageBox_Exit(parentWindow);
+        //    exit.ShowDialog();
+        //}
+        
 
         private void Database_Reset_Click(object sender, RoutedEventArgs e)
         {
@@ -81,5 +82,6 @@ namespace radaway_surcharge_calc_HUN.Views.User_Controls
             var window = App.AppHost.Services.GetService<CrudWindow>();
             window?.ShowDialog();
         }
+        
     }
 }

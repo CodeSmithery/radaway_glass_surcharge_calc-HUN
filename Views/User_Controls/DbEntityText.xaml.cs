@@ -21,6 +21,7 @@ namespace radaway_surcharge_calc_HUN.Views.User_Controls
     /// </summary>
     public partial class DbEntityText : UserControl
     {
+        public event EventHandler textChanged;
         public DbEntityText()
         {
             InitializeComponent();
@@ -57,8 +58,12 @@ namespace radaway_surcharge_calc_HUN.Views.User_Controls
         {
             if (string.IsNullOrEmpty(tbxInput.Text))
                 tblExample.Visibility = Visibility.Visible;
+
             else
-                tblExample.Visibility = Visibility.Collapsed;    
+                tblExample.Visibility = Visibility.Collapsed;
+
+            textChanged?.Invoke(sender, EventArgs.Empty);
+            
         }
     }
 }
