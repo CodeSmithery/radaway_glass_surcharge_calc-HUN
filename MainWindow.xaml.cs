@@ -1,7 +1,7 @@
 ﻿using radaway_surcharge_calc_HUN.Data;
 using radaway_surcharge_calc_HUN.Models;
-using radaway_surcharge_calc_HUN.Services.Command;
 using radaway_surcharge_calc_HUN.Views.User_Controls;
+using radaway_surcharge_calc_HUN.Views.Windows;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -29,7 +29,6 @@ namespace radaway_surcharge_calc_HUN
         private ComboBox glCBox;
         private TextBox userInputPrice;
         private TextBox priceOutput;
-        public ICommand SaveCommand { get; } 
         private static void Placement (UIElement element, int row, int column, Grid parent) {
             Grid.SetRow(element, row);
             Grid.SetColumn(element, column);
@@ -96,7 +95,6 @@ namespace radaway_surcharge_calc_HUN
 
             btnCalculate.IsEnabled = false;
 
-            SaveCommand = new RelayCommand(Save, ()=>false);
             DataContext = this;
 
             _dbcontext = dbcontext;
@@ -105,9 +103,6 @@ namespace radaway_surcharge_calc_HUN
 
             CreateGridContent();
             
-        }
-        public static void Save()
-        {
         }
 
         private void LoadDataFromDb()
@@ -211,6 +206,16 @@ namespace radaway_surcharge_calc_HUN
 
             int price = inputPrice + surcharge * sides;
             priceOutput.Text = price.ToString("N2");
+        }
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            var result = MessageBox.Show("Biztosan kilépsz?","Kilépés",MessageBoxButton.YesNo,MessageBoxImage.Warning);
+
+            if (result == MessageBoxResult.No)
+            {
+                e.Cancel = true;
+            }
+
         }
     }
 

@@ -1,10 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using radaway_surcharge_calc_HUN.Data;
 using radaway_surcharge_calc_HUN.Models;
-using radaway_surcharge_calc_HUN.Services.Command;
 using radaway_surcharge_calc_HUN.Views.User_Controls;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Drawing.Drawing2D;
 using System.Text;
 using System.Windows;
@@ -26,7 +27,8 @@ namespace radaway_surcharge_calc_HUN.Views.Windows
     public partial class CrudWindow : Window
     {
         public bool IsCrudMenuOn { get; set; } = false;
-        public ICommand SaveCommand { get; }
+        private bool tbHasChanges = false;
+        private bool dgHasChanges = false;
 
         private DbEntityText pr_Fam;
         private DbEntityText pr_Thick;
@@ -34,16 +36,17 @@ namespace radaway_surcharge_calc_HUN.Views.Windows
         private DbEntityText gl_Thick;
         private DbEntityText gl_Surch;
 
-        private List<ProductFamilies> productFamilies;
-        private List<GlassSurcharges> glassSurcharges;
+        private ObservableCollection<ProductFamilies> productFamilies;
+        private ObservableCollection<GlassSurcharges> glassSurcharges;
 
         public readonly dataContext _dbcontext;
+
+
         public CrudWindow(dataContext dbcontext)
         {
             InitializeComponent();
-            _dbcontext = dbcontext;
 
-            SaveCommand = new RelayCommand(Save, () => true);
+            _dbcontext = dbcontext;
             DataContext = this;
 
 
@@ -53,87 +56,117 @@ namespace radaway_surcharge_calc_HUN.Views.Windows
 
 
         }
-        private void Save()
+        private void btSave_Click(object? sender, RoutedEventArgs e)
         {
+            string activeTab = (tabcCreate.SelectedItem as TabItem)?.Name.ToString();
+            int thicknessHelper;
+            int surchargeHelper;
+
             if (Validation.GetHasError(dgGlassSurcharges) || Validation.GetHasError(dgProductFamilies))
             {
                 MessageBox.Show("Hibás adat van a táblázatban. Javítsd ki mentés előtt.");
                 return;
             }
 
-            int thicknessHelper;
-            int surchargeHelper;
-
-            if (!string.IsNullOrEmpty(pr_Fam.tbxInput.Text)
-                && !string.IsNullOrEmpty(pr_Thick.tbxInput.Text))
+            switch(activeTab)
             {
-                if (Int32.TryParse(pr_Thick.tbxInput.Text, out int prThick))
-                    thicknessHelper = prThick;                
-                else
-                {
-                    MessageBox.Show("A vastagság mezőbe csak számot lehet írni!", "Hiba", MessageBoxButton.OK, MessageBoxImage.Error);
+                case "tabProductFamilies":
+                    if (!string.IsNullOrEmpty(pr_Fam.tbxInput.Text)
+                        && !string.IsNullOrEmpty(pr_Thick.tbxInput.Text))
+                    {
+                        if (Int32.TryParse(pr_Thick.tbxInput.Text, out int prThick))
+                            thicknessHelper = prThick;                
+                        else
+                        {
+                            MessageBox.Show("A vastagság mezőbe csak számot lehet írni!", "Hiba", MessageBoxButton.OK, MessageBoxImage.Error);
+                            return;
+                        }
+
+                        Reseed();
+
+                        var newProductFamily = new ProductFamilies
+                        {
+                            Termek_Csalad = pr_Fam.tbxInput.Text.ToUpper(),
+                            Uveg_Vastagsag_mm = thicknessHelper
+                        };
+
+                        _dbcontext.ProductFamilies.Add(newProductFamily);
+                        _dbcontext.SaveChanges();
+                        pr_Fam.tbxInput.Text = string.Empty;
+                        pr_Thick.tbxInput.Text = string.Empty;
+                        MessageBox.Show("A termékcsalád sikeresen létrehozva!");
+                    }
+                    else if (!string.IsNullOrEmpty(pr_Fam.tbxInput.Text)
+                        || !string.IsNullOrEmpty(pr_Thick.tbxInput.Text))
+                    {
+                        MessageBox.Show("Minden termékcsaládhoz tartozó mező kitöltése kötelező annak mentéséhez!", "Információ", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }     
+                    else if (dgHasChanges)
+                    {
+                        _dbcontext.SaveChanges();
+                    }
+                    break; 
+
+                case "tabGlassSurcharges":
+                    if (!string.IsNullOrEmpty(gl_Type.tbxInput.Text)
+                        && !string.IsNullOrEmpty(gl_Thick.tbxInput.Text)
+                        && !string.IsNullOrEmpty(gl_Surch.tbxInput.Text))
+                    {
+
+
+                        if (Int32.TryParse(gl_Thick.tbxInput.Text, out int glThick))
+                            thicknessHelper = glThick;
+                        else
+                        {
+                            MessageBox.Show("A vastagság mezőbe csak számot lehet írni!", "Hiba", MessageBoxButton.OK, MessageBoxImage.Error);
+                            return;
+                        }
+
+                        if (Int32.TryParse(gl_Surch.tbxInput.Text, out int glSurch))
+                            surchargeHelper = glSurch;
+                        else
+                        {
+                            MessageBox.Show("A felár mezőbe csak számot lehet írni!", "Hiba", MessageBoxButton.OK, MessageBoxImage.Error);
+                            return;
+                        }
+
+                        Reseed();
+                        var newGlassSurcharge = new GlassSurcharges
+                        {
+                            Uveg_Tipus = gl_Type.tbxInput.Text.ToUpper(),
+                            Uveg_Vastagsag_mm = thicknessHelper,
+                            Felar_ft = surchargeHelper
+                        };
+
+                        _dbcontext.GlassSurcharges.Add(newGlassSurcharge);
+                        _dbcontext.SaveChanges();
+                        gl_Surch.tbxInput.Text = string.Empty;
+                        gl_Thick.tbxInput.Text = string.Empty;
+                        gl_Type.tbxInput.Text = string.Empty;
+                        MessageBox.Show("Az üvegtípus felára sikeresen létrehozva!");
+                    }
+                    else if (!string.IsNullOrEmpty(gl_Type.tbxInput.Text)
+                        || !string.IsNullOrEmpty(gl_Thick.tbxInput.Text)
+                        || !string.IsNullOrEmpty(gl_Surch.tbxInput.Text))
+                    {
+                        MessageBox.Show("Minden üvegtípushoz tartozó mező kitöltése kötelező annak mentéséhez!", "Információ", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    else if (dgHasChanges)
+                    {
+                        _dbcontext.SaveChanges();
+                    }
+                    break;
+
+                default:
+                    MessageBox.Show("Valami hiba történt a mentés során. Próbáld újra!", "Hiba", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
-                }
-
-                Reseed();
-
-                var newProductFamily = new ProductFamilies
-                {
-                    Termek_Csalad = pr_Fam.tbxInput.Text.ToUpper(),
-                    Uveg_Vastagsag_mm = thicknessHelper
-                };
-
-                _dbcontext.ProductFamilies.Add(newProductFamily);
-                _dbcontext.SaveChanges();
-                MessageBox.Show("A termékcsalád sikeresen létrehozva!");
-            }
-            else
-            {
-                MessageBox.Show("Minden termékcsaládhoz tartozó mező kitöltése kötelező annak mentéséhez!", "Információ", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-
-
-            if (!string.IsNullOrEmpty(gl_Type.tbxInput.Text)
-                && !string.IsNullOrEmpty(gl_Thick.tbxInput.Text)
-                && !string.IsNullOrEmpty(gl_Surch.tbxInput.Text))
-            {
-
-
-                if (Int32.TryParse(gl_Thick.tbxInput.Text, out int glThick))
-                    thicknessHelper = glThick;
-                else
-                {
-                    MessageBox.Show("A vastagság mezőbe csak számot lehet írni!", "Hiba", MessageBoxButton.OK, MessageBoxImage.Error);
-                    return;
-                }
-
-                if (Int32.TryParse(gl_Surch.tbxInput.Text, out int glSurch))
-                    surchargeHelper = glSurch;
-                else
-                {
-                    MessageBox.Show("A felár mezőbe csak számot lehet írni!", "Hiba", MessageBoxButton.OK, MessageBoxImage.Error);
-                    return;
-                }
-
-                Reseed();
-                var newGlassSurcharge = new GlassSurcharges
-                {
-                    Uveg_Tipus = gl_Type.tbxInput.Text.ToUpper(),
-                    Uveg_Vastagsag_mm = thicknessHelper,
-                    Felar_ft = surchargeHelper
-                };
-
-                _dbcontext.GlassSurcharges.Add(newGlassSurcharge);
-                _dbcontext.SaveChanges();
-                MessageBox.Show("Az üvegtípus felára sikeresen létrehozva!");
-            }
-            else
-            {
-                MessageBox.Show("Minden üvegtípushoz tartozó mező kitöltése kötelező annak mentéséhez!", "Információ", MessageBoxButton.OK, MessageBoxImage.Information);
             }
 
             LoadDataFromDb();
             LoadData();
+            tbHasChanges = false;
+            dgHasChanges = false;
+            btSave.IsEnabled = false;
         }
 
         private void LoadData()
@@ -152,10 +185,19 @@ namespace radaway_surcharge_calc_HUN.Views.Windows
             glRnd = rnd.Next(0, glassSurcharges.Count);
 
             pr_Fam = new();
+            pr_Fam.textChanged += TbHasChanges;
+
             pr_Thick = new();
+            pr_Thick.textChanged += TbHasChanges;
+
             gl_Type = new();
+            gl_Type.textChanged += TbHasChanges;
+
             gl_Thick = new();
+            gl_Thick.textChanged += TbHasChanges;
+
             gl_Surch = new();
+            gl_Surch.textChanged += TbHasChanges;
 
             Grid.SetRow(pr_Fam, 0);
             Grid.SetRow(pr_Thick, 1);
@@ -189,8 +231,108 @@ namespace radaway_surcharge_calc_HUN.Views.Windows
 
         private void LoadDataFromDb()
         {
-            productFamilies = [.. _dbcontext.ProductFamilies];
-            glassSurcharges = [.. _dbcontext.GlassSurcharges];
+            _dbcontext.ChangeTracker.Clear();
+            productFamilies = new ObservableCollection<ProductFamilies>([.. _dbcontext.ProductFamilies]);
+            glassSurcharges = new ObservableCollection<GlassSurcharges>([.. _dbcontext.GlassSurcharges]);
+        }
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            var result = MessageBox.Show("Biztosan kilépsz?", "Kilépés", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+
+            if (result == MessageBoxResult.No)
+            {
+                e.Cancel = true;
+            }
+        }
+
+        private void btDelete_Click(object sender, RoutedEventArgs e)
+        {
+            if (dgProductFamilies.SelectedItem != null)
+                DeleteProductFamily();
+            else if (dgGlassSurcharges.SelectedItem != null)
+                DeleteGlassSurcharge();
+        }
+
+        private void TbHasChanges(object sender, EventArgs e)
+        {
+            bool tb = (sender as TextBox).Text.ToString().IsNullOrEmpty();
+
+            if (tb)
+            {
+                tbHasChanges = false;
+                btSave.IsEnabled = false;
+                return;
+            }
+            else if (!tb)
+            {
+                tbHasChanges = true;
+                btSave.IsEnabled = true;
+            }
+        }
+        private void DgHasChanges(object sender, EventArgs e)
+        {
+            dgHasChanges = true;
+            btSave.IsEnabled = true;
+        }
+
+        private void dgProductFamilies_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            btDelete.IsEnabled = dgProductFamilies.SelectedItem != null;
+        }
+
+        private void dgGlassSurcharges_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            btDelete.IsEnabled = dgGlassSurcharges.SelectedItem != null;
+        }
+
+        private void DeleteProductFamily()
+        {
+            var selectedItems = dgProductFamilies.SelectedItems
+                .Cast<ProductFamilies>()
+                .ToList();
+
+            if (selectedItems.Count == 0)
+                return;
+
+            if (MessageBox.Show(
+                $"{selectedItems.Count} elem törlése?",
+                "Megerősítés",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning) != MessageBoxResult.Yes)
+                return;
+
+            foreach (var item in selectedItems)
+            {
+                _dbcontext.ProductFamilies.Remove(item);
+                productFamilies.Remove(item);
+            }
+
+            _dbcontext.SaveChanges();
+        }
+
+        private void DeleteGlassSurcharge()
+        {
+            var selectedItems = dgGlassSurcharges.SelectedItems
+            .Cast<GlassSurcharges>()
+            .ToList();
+
+            if (selectedItems.Count == 0)
+                return;
+
+            if (MessageBox.Show(
+                $"{selectedItems.Count} elem törlése?",
+                "Megerősítés",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning) != MessageBoxResult.Yes)
+                return;
+
+            foreach (var item in selectedItems)
+            {
+                _dbcontext.GlassSurcharges.Remove(item);
+                glassSurcharges.Remove(item);
+            }
+
+            _dbcontext.SaveChanges();
         }
     }
 }
